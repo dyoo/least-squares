@@ -10,4 +10,4 @@
 (define blurb 
   '("least-squares: fitting a line to a sequence of 2d-points."))
 (define release-notes
-  '((p "Fixing the documentation.")))
+  '((p "Documentation fixes.")))
