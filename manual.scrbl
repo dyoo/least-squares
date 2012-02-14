@@ -3,7 +3,9 @@
           scribble/eval
           racket/sandbox
           planet/resolver
-          (for-label (this-package-in main)))
+          (for-label (this-package-in main)
+                     racket/base
+                     lang/posn))
 
 @(define my-evaluator (make-base-eval))
 
@@ -58,9 +60,11 @@ computes points on the fitted line:
 
 @section{API}
 
-@defproc[(least-squares [data (sequenceof (sequence number number))]) (values [slope number] [intersect number])]{
+@defproc[(least-squares [data (sequenceof (or/c (sequence number number)
+                                                posn))]) (values [slope number] [intersect number])]{
 Computes the slope and intersect for a line that best
-fits the points according to the method of least squares.
+fits the points according to the method of least squares and returns
+them as two values.
 
 For example:
 @interaction[#:eval my-evaluator
@@ -72,7 +76,8 @@ For example:
 }
 
 
-@defproc[(least-squares-function [data (sequenceof (sequence number number))]) [f (number -> number)]]{
+@defproc[(least-squares-function [data (sequenceof (or/c (sequence number number)
+                                                         posn))]) [f (number -> number)]]{
 Constructs a function that fits the given data.
 For example:
 @interaction[#:eval my-evaluator

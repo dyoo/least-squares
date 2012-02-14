@@ -1,6 +1,6 @@
 #lang racket/base
-(require racket/sequence
-         racket/match)
+(require racket/sequence 
+         lang/posn)
 
 ;; The Method of Least Squares.
 ;;
@@ -17,10 +17,15 @@
 
 (define (sqr x) (* x x))
 
-;; least-squares: (sequenceof (sequence number number)) -> (values [slope number] [intersect number])
 (define (least-squares points)
-  (define-values (xs ys) (split-xs-ys points))
+  (-least-squares 'least-squares points))
+
+;; least-squares: symbol (sequenceof (sequence number number)) -> (values [slope number] [intersect number])
+(define (-least-squares who points)
+  (define-values (xs ys) (split-xs-ys who points))
   (define n (length xs))
+  (when (< n 2)
+    (raise-type-error who "sequence of at least two points" points))
   
   (define slope (/ (- (* n (sum (map * xs ys)))
                       (* (sum xs) (sum ys)))
@@ -33,17 +38,32 @@
   (values slope intersect))
 
 
-(define (split-xs-ys points)
+;; Split up the sequence into (xs..., ys...) lists.
+(define (split-xs-ys who points)
+  (unless (sequence? points)
+    (raise-type-error who "sequence of 2d-points" points))
   (define-values (xs ys)
     (for/fold ([xs '()]
                [ys '()])
               ([p points])
-      (define pl (sequence->list p))
-      (match pl
-        [(list x y)
-         (values (cons x xs) (cons y ys))]
-        [else
-         (raise-type-error 'least-squares "expected a sequence of two numbers: ~e" pl)])))
+      (define (on-element-error seen-so-far)
+        (raise-type-error who "a 2d-point" 
+                          p))
+      (cond [(sequence? p)
+             (define-values (more? next) (sequence-generate p))
+             (unless (more?) (on-element-error '()))
+             (define x (next))
+             (unless (more?) (on-element-error (list x)))
+             (define y (next))
+             (when (more?) (on-element-error (list x y)))
+             (values (cons x xs) (cons y ys))]
+
+            [(posn? p)
+             (values (cons (posn-x p) xs) 
+                     (cons (posn-y p) ys))]
+            
+            [else
+             (on-element-error '())])))
   (values (reverse xs) (reverse ys)))
 
 
@@ -58,5 +78,5 @@
                                  (least-squares-function-intersect an-ls))))
 
 (define (new-least-squares-function points)
-  (define-values (slope intersect) (least-squares points))
+  (define-values (slope intersect) (-least-squares 'least-squares-function points))
   (least-squares-function slope intersect))
