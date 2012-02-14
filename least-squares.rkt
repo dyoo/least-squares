@@ -9,8 +9,11 @@
 ;; points.
 
 (provide least-squares
-         least-squares-function)
-  
+         (rename-out [new-least-squares-function least-squares-function])
+         least-squares-function-slope
+         least-squares-function-intersect)
+
+
 (define (sqr x) (* x x))
 
 ;; least-squares: (sequenceof (sequence number number)) -> (values [slope number] [intersect number])
@@ -28,23 +31,31 @@
   
   (values slope intersect))
 
-(define (least-squares-function points)
-  (define-values (slope intersect)
-    (least-squares points))
-  (lambda (x)
-    (+ (* x slope) intersect)))
-
 
 (define (split-xs-ys points)
   (define-values (xs ys)
     (for/fold ([xs '()]
                [ys '()])
               ([p points])
-      (match (sequence->list p)
+      (define pl (sequence->list p))
+      (match pl
         [(list x y)
-         (values (cons x xs) (cons y ys))])))
+         (values (cons x xs) (cons y ys))]
+        [else
+         (raise-type-error 'least-squares "expected a sequence of two numbers: ~e" pl)])))
   (values (reverse xs) (reverse ys)))
 
 
 (define (sum nums)
   (apply + nums))
+
+
+(struct least-squares-function (slope intersect)
+  #:transparent
+  #:property prop:procedure (lambda (an-ls x)
+                              (+ (* x (least-squares-function-slope an-ls))
+                                 (least-squares-function-intersect an-ls))))
+
+(define (new-least-squares-function points)
+  (define-values (slope intersect) (least-squares points))
+  (least-squares-function slope intersect))
