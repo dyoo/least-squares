@@ -21,7 +21,7 @@
   (define slope (/ (- (* n (sum (map * xs ys)))
                       (* (sum xs) (sum ys)))
                    (- (* n (sum (map sqr xs)))
-                      (sum (map sqr ys)))))
+                      (sqr (sum xs)))))
 
   (define intersect (- (/ (sum ys) n)
                        (* slope (/ (sum xs) n))))
