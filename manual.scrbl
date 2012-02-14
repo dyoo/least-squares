@@ -4,7 +4,6 @@
           racket/sandbox
           planet/resolver
           (for-label (this-package-in main)
-                     racket/base
                      lang/posn))
 
 @(define my-evaluator (make-base-eval))
@@ -47,8 +46,7 @@ with @racket[least-squares]:
                     an-intersect
 ]
 
-Another way to use this library is to use
-@racket[least-squares-function] to probe the points on the fitted line:
+You can also use @racket[least-squares-function] to probe the points on the fitted line:
 @interaction[#:eval my-evaluator
                     (define my-linear-function
                       (least-squares-function '((0 -0.2342) (1 1.0001) (2 1.82123) (3 3.1415926))))
