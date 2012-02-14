@@ -48,8 +48,7 @@ with @racket[least-squares]:
 ]
 
 Another way to use this library is to use
-@racket[least-squares-function] to get a procedure whose behavior
-computes points on the fitted line:
+@racket[least-squares-function] to probe the points on the fitted line:
 @interaction[#:eval my-evaluator
                     (define my-linear-function
                       (least-squares-function '((0 -0.2342) (1 1.0001) (2 1.82123) (3 3.1415926))))
