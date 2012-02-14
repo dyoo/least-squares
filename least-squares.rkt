@@ -8,13 +8,13 @@
 ;; the slope `b` and y-intersect `a` that the line y = a + bx best approximates the
 ;; points.
 
-(provide least-squares-slope-and-intersection
+(provide least-squares
          least-squares-function)
   
 (define (sqr x) (* x x))
 
-;; least-squares-slope-and-intersection: (sequenceof (sequence number number)) -> (values [slope number] [intersect number])
-(define (least-squares-slope-and-intersection points)
+;; least-squares: (sequenceof (sequence number number)) -> (values [slope number] [intersect number])
+(define (least-squares points)
   (define-values (xs ys) (split-xs-ys points))
   (define n (length xs))
   
@@ -30,7 +30,7 @@
 
 (define (least-squares-function points)
   (define-values (slope intersect)
-    (least-squares-slope-and-intersection points))
+    (least-squares points))
   (lambda (x)
     (+ (* x slope) intersect)))
 
