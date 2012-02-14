@@ -1,8 +1,6 @@
 #lang scribble/manual
 @(require planet/scribble
           scribble/eval
-          racket/sandbox
-          planet/resolver
           (for-label (this-package-in main)
                      lang/posn))
 

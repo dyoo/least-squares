@@ -1,5 +1,5 @@
 #lang racket/base
-(require racket/sequence 
+(require ;;racket/sequence 
          lang/posn)
 
 ;; The Method of Least Squares.
