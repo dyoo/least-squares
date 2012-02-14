@@ -99,3 +99,11 @@ Example:
                       (least-squares-function '((2.718 3.1415926) (1.618 1.414213))))
                     (least-squares-function-slope h)
                     (least-squares-function-intersect h)]
+
+@defproc[(least-squares-function? [x any]) boolean]{Returns true if @racket[x] is a function produced by @racket[least-squares-function].
+Example:
+@interaction[#:eval my-evaluator
+                    (least-squares-function? (lambda (x) x))
+                    (define k (least-squares-function '((0 0) (1 1))))
+                    (least-squares-function? k)]
+}

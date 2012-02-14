@@ -10,6 +10,7 @@
 
 (provide least-squares
          (rename-out [new-least-squares-function least-squares-function])
+         least-squares-function?
          least-squares-function-slope
          least-squares-function-intersect)
 
