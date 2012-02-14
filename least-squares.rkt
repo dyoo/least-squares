@@ -27,13 +27,16 @@
   (when (< n 2)
     (raise-type-error who "sequence of at least two points" points))
   
+  (define xs-sum (sum xs))
+  (define ys-sum (sum ys))
+  
   (define slope (/ (- (* n (sum (map * xs ys)))
-                      (* (sum xs) (sum ys)))
+                      (* xs-sum ys-sum))
                    (- (* n (sum (map sqr xs)))
-                      (sqr (sum xs)))))
+                      (sqr xs-sum))))
 
-  (define intersect (- (/ (sum ys) n)
-                       (* slope (/ (sum xs) n))))
+  (define intersect (- (/ ys-sum n)
+                       (* slope (/ xs-sum n))))
   
   (values slope intersect))
 
